@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
+import styles from '../../styles/CountdownTimer.module.css'
 
+const hourValue =24 //magic number
+const minuteValue = 60
+const secondValue = 60
+const milisecondValue = 1000
 
 function CountdownTimer() {
+  
   const [countdown, setCountdown] = useState({
     days: 0,
     hours: 0,
@@ -12,13 +18,13 @@ function CountdownTimer() {
   const [targetDate, setTargetDate] = useState(null);
 
   const handleDaysChange = (event) => {
-    const { value } = event.target;
+     const {value} = event.target;
     const numValue = parseInt(value);
 
     if (!isNaN(numValue)) {
-      setTargetDate((prevTargetDate) => {
+      setTargetDate(() => {
         const now = new Date().getTime();
-        const targetTime = now + numValue * 24 * 60 * 60 * 1000;
+        const targetTime = now + (numValue * hourValue * minuteValue * secondValue * milisecondValue);
         return new Date(targetTime);
       });
     }
@@ -31,11 +37,11 @@ function CountdownTimer() {
       intervalId = setInterval(() => {
         const now = new Date().getTime();
         const distance = targetDate.getTime() - now;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        const days = Math.floor(distance / (milisecondValue * secondValue * minuteValue * hourValue));
+        const hours = Math.floor((distance % (milisecondValue * secondValue * minuteValue * hourValue)) / (milisecondValue * secondValue * minuteValue));
+        const minutes = Math.floor((distance % (milisecondValue * secondValue * minuteValue)) / (milisecondValue * secondValue));
+        const seconds = Math.floor((distance % (milisecondValue * secondValue)) / milisecondValue);
 
         setCountdown({ days, hours, minutes, seconds });
       }, 1000);
@@ -47,32 +53,20 @@ function CountdownTimer() {
   }, [targetDate]);
 
   return (
-    <div className='countdown-container'>
+    <div className={styles.countdownContainer}>
       <label>
-        Timer:
-        <input type="number" name="day" min="1" onChange={handleDaysChange} />
+        Timer(Day): 
+        <input className={styles.input} type="number" name="day" min="1" onChange={handleDaysChange} />
       </label>
-      <h1 className='countdown-text'>CountdownTimer: {countdown.days} days, {countdown.hours} hours, {countdown.minutes} minutes, {countdown.seconds} seconds.</h1>
-      <style jsx>{`
-        .countdown-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 100vh;
-        }
-
-        .countdown-text {
-          font-size: 3rem;
-          margin-top: 2rem;
-          text-align: center;
-        }
-
-        input {
-          margin-left: 1rem;
-          font-size: 1.5rem;
-        }
-      `}</style>
+      <h1 className={styles.countdownText}>CountdownTimer: 
+      <br/> 
+      <br/>
+      {countdown.days} d, 
+      {countdown.hours} hr, 
+      {countdown.minutes} min, 
+      {countdown.seconds} sec
+      </h1>
+      
     </div>
   );
 }

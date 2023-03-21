@@ -1,0 +1,19 @@
+.countdownContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .countdownText {
+    font-size: 3rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .input {
+    margin-left: 1rem;
+    font-size: 1.5rem;
+
+  }
